@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Immigration Resource Library Prototype</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --brand: #0f766e;
+      --brand-soft: #ccfbf1;
+      --accent: #eff6ff;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #eefbf8 100%);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: var(--brand-soft);
+      color: #115e59;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.1;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 820px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 16px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+    }
+
+    .panel h2, .panel h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      font-size: 14px;
+      margin-bottom: 16px;
+      outline: none;
+    }
+
+    .filter-group { margin-bottom: 18px; }
+    .filter-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .chip.active {
+      background: var(--brand);
+      color: white;
+      border-color: var(--brand);
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 12px;
+    }
+
+    .results-count {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .meta-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--accent);
+      color: #1d4ed8;
+    }
+
+    .year {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .org {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: -6px;
+    }
+
+    .summary {
+      margin: 0;
+      color: #374151;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      font-size: 12px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+
+    .button {
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .button.primary {
+      background: var(--brand);
+      color: white;
+    }
+
+    .button.secondary {
+      background: #f8fafc;
+      color: var(--text);
+      border: 1px solid var(--line);
+      cursor: pointer;
+    }
+
+    .empty {
+      background: var(--card);
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      padding: 26px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    dialog {
+      border: none;
+      border-radius: 22px;
+      width: min(760px, calc(100vw - 32px));
+      padding: 0;
+      box-shadow: 0 30px 80px rgba(15, 23, 42, 0.25);
+    }
+
+    dialog::backdrop {
+      background: rgba(15, 23, 42, 0.38);
+    }
+
+    .modal {
+      padding: 24px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .modal h2 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      line-height: 1.2;
+    }
+
+    .modal-close {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px 11px;
+      cursor: pointer;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .detail-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fafafa;
+    }
+
+    .detail-box strong {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .detail-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <div class="eyebrow">Test prototype</div>
+      <h1>Immigration Resource Library</h1>
+      <p>
+        A small GitHub-friendly prototype showing how tagged immigration and economic impact resources could be presented in a more public, searchable format.
+        This version uses 4 sample resources and demonstrates search, simplified filters, scannable cards, and detail pages.
+      </p>
+    </section>
+
+    <div class="layout">
+      <aside class="panel">
+        <h2>Browse resources</h2>
+        <input id="searchInput" class="search-input" type="text" placeholder="Search title, publisher, summary, or tags" />
+
+        <div class="filter-group">
+          <div class="filter-label">Topic</div>
+          <div class="chips" id="topicChips"></div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Population</div>
+          <div class="chips" id="populationChips"></div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Geography</div>
+          <div class="chips" id="geographyChips"></div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Use case</div>
+          <div class="chips" id="useCaseChips"></div>
+        </div>
+
+        <div class="hint">
+          For a full version, additional filters could be moved into an “Advanced filters” section so the public interface stays clear and not too technical.
+        </div>
+      </aside>
+
+      <main>
+        <div class="results-header">
+          <div>
+            <h2 style="margin:0 0 6px;">Resource results</h2>
+            <div class="results-count" id="resultsCount"></div>
+          </div>
+        </div>
+        <div class="cards" id="cards"></div>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="detailDialog">
+    <div class="modal" id="modalContent"></div>
+  </dialog>
+
+  <script>
+    const resources = [
+      {
+        id: 1,
+        title: "Immigrants in the Low-Wage Workforce",
+        organization: "WorkRise (Urban Institute); Hamutal Bernstein; Fernando Hernandez-Lepe",
+        year: 2025,
+        format: "Research Report",
+        geography: ["National"],
+        topic: ["Economic Activity", "Low-Wage Workforce", "Industry-Specific"],
+        populations: ["Undocumented", "Refugees", "International Students"],
+        useCases: ["Policy Advocacy", "Business Engagement"],
+        link: "https://www.workrisenetwork.org/working-knowledge/immigrants-low-wage-workforce",
+        summary: "National data tool on immigrant low-wage workers showing overrepresentation in key sectors, with demographic breakdowns and recommendations on fair pay, ESL access, and credential recognition.",
+        details: {
+          authorType: "Research Institute",
+          demographics: ["Country of Origin", "Ethnicity", "Educational Attainment"],
+          whyUseful: "Helpful for workforce, labor, and narrative-change conversations because it combines data, charts, and practical recommendations."
+        }
+      },
+      {
+        id: 2,
+        title: "Building Inclusive Cities: Immigration and Neighborhood Change in Detroit",
+        organization: "Global Detroit; Alan Mallach; Data Driven Detroit",
+        year: 2021,
+        format: "Research Report",
+        geography: ["City / Local", "Metro / Sub-State Region"],
+        topic: ["Economic Activity", "Small Business", "Success Stories"],
+        populations: ["Population Growth"],
+        useCases: ["Program Design", "Narrative Change"],
+        link: "https://globaldetroitmi.org/wp-content/uploads/2021/08/20210803-BIC-Report_Compressed.pdf",
+        summary: "Detroit-focused report showing how immigrants have helped stabilize neighborhoods through homeownership and small business activity, while also offering guidance on building relationships between immigrant and long-time residents.",
+        details: {
+          authorType: "Community Group / Practitioner",
+          demographics: ["Ethnicity", "Educational Attainment"],
+          whyUseful: "Strong local precedent for Detroit storytelling, community engagement strategies, and place-based economic development arguments."
+        }
+      },
+      {
+        id: 3,
+        title: "Toolkit: Mobilizing Against Anti-Refugee/Asylum Legislation in States",
+        organization: "Refugee Advocacy Lab; IRAP; IRC; American Immigration Council",
+        year: 2024,
+        format: "Policy Guide",
+        geography: ["State-Level"],
+        topic: ["Policy Response", "Advocacy Tools"],
+        populations: ["Refugees", "Asylum / Humanitarian Entrants"],
+        useCases: ["Policy Advocacy"],
+        link: "https://www.refugeeadvocacylab.org/resources/toolkit-mobilizing-against-anti-refugee/asylum-legislation",
+        summary: "Advocacy toolkit explaining common bill types and offering concrete guidance for testimony, strategy, and messaging against anti-refugee and anti-asylum legislation.",
+        details: {
+          authorType: "Policy Advocacy Org",
+          demographics: [],
+          whyUseful: "Useful when the audience needs fast-response advocacy materials rather than broad background research."
+        }
+      },
+      {
+        id: 4,
+        title: "The Red State Playbook: Opportunities for Refugee and Immigrant Inclusion and Workforce Engagement",
+        organization: "Refugee Advocacy Lab; IRAP; Balqees Mihirig; Charlotte Haq",
+        year: 2025,
+        format: "Policy Guide",
+        geography: ["State-Level", "Multi-State Region"],
+        topic: ["Economic Activity", "High Skilled Labor", "Workforce Engagement"],
+        populations: ["Refugees", "Asylum / Humanitarian Entrants"],
+        useCases: ["Policy Advocacy", "Quick Facts"],
+        link: "https://www.refugeeadvocacylab.org/resources/the-red-state-playbook",
+        summary: "Guide highlighting bipartisan and Republican-supported state actions that advance refugee and immigrant inclusion through workforce policy, licensure reform, and state-level economic strategies.",
+        details: {
+          authorType: "Policy Advocacy Org",
+          demographics: [],
+          whyUseful: "Valuable for audiences needing politically pragmatic examples and state-level policy models."
+        }
+      }
+    ];
+
+    const state = {
+      search: "",
+      topic: null,
+      population: null,
+      geography: null,
+      useCase: null
+    };
+
+    const allOptions = {
+      topic: [...new Set(resources.flatMap(r => r.topic))].sort(),
+      population: [...new Set(resources.flatMap(r => r.populations))].sort(),
+      geography: [...new Set(resources.flatMap(r => r.geography))].sort(),
+      useCase: [...new Set(resources.flatMap(r => r.useCases))].sort()
+    };
+
+    function renderChips(containerId, key, options) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+
+      const allChip = document.createElement("button");
+      allChip.className = `chip ${state[key] === null ? "active" : ""}`;
+      allChip.textContent = "All";
+      allChip.onclick = () => {
+        state[key] = null;
+        update();
+      };
+      container.appendChild(allChip);
+
+      options.forEach(option => {
+        const chip = document.createElement("button");
+        chip.className = `chip ${state[key] === option ? "active" : ""}`;
+        chip.textContent = option;
+        chip.onclick = () => {
+          state[key] = state[key] === option ? null : option;
+          update();
+        };
+        container.appendChild(chip);
+      });
+    }
+
+    function matches(resource) {
+      const text = `${resource.title} ${resource.organization} ${resource.summary} ${resource.topic.join(" ")} ${resource.populations.join(" ")} ${resource.useCases.join(" ")} ${resource.geography.join(" ")}`.toLowerCase();
+      const searchOk = !state.search || text.includes(state.search.toLowerCase());
+      const topicOk = !state.topic || resource.topic.includes(state.topic);
+      const populationOk = !state.population || resource.populations.includes(state.population);
+      const geographyOk = !state.geography || resource.geography.includes(state.geography);
+      const useCaseOk = !state.useCase || resource.useCases.includes(state.useCase);
+      return searchOk && topicOk && populationOk && geographyOk && useCaseOk;
+    }
+
+    function renderCards(filtered) {
+      const cards = document.getElementById("cards");
+      const count = document.getElementById("resultsCount");
+      count.textContent = `${filtered.length} resource${filtered.length === 1 ? "" : "s"} shown`;
+      cards.innerHTML = "";
+
+      if (!filtered.length) {
+        cards.innerHTML = `<div class="empty">No resources match this combination. Try clearing one or two filters.</div>`;
+        return;
+      }
+
+      filtered.forEach(resource => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="meta-top">
+            <span class="badge">${resource.format}</span>
+            <span class="year">${resource.year}</span>
+          </div>
+          <h3>${resource.title}</h3>
+          <div class="org">${resource.organization}</div>
+          <p class="summary">${resource.summary}</p>
+          <div class="tag-row">${resource.topic.slice(0,3).map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+          <div class="tag-row">${resource.geography.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+          <div class="actions">
+            <button class="button secondary" data-id="${resource.id}">View details</button>
+            <a class="button primary" href="${resource.link}" target="_blank" rel="noopener noreferrer">Open source</a>
+          </div>
+        `;
+        cards.appendChild(card);
+      });
+
+      cards.querySelectorAll("[data-id]").forEach(button => {
+        button.addEventListener("click", () => openModal(Number(button.dataset.id)));
+      });
+    }
+
+    function openModal(id) {
+      const resource = resources.find(r => r.id === id);
+      const modal = document.getElementById("modalContent");
+      modal.innerHTML = `
+        <div class="modal-header">
+          <div>
+            <div class="badge">${resource.format}</div>
+            <h2>${resource.title}</h2>
+            <div class="org">${resource.organization} · ${resource.year}</div>
+          </div>
+          <button class="modal-close" onclick="document.getElementById('detailDialog').close()">Close</button>
+        </div>
+        <p class="summary">${resource.summary}</p>
+        <div class="detail-grid">
+          <div class="detail-box">
+            <strong>Topic</strong>
+            <div class="tag-row">${resource.topic.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+          </div>
+          <div class="detail-box">
+            <strong>Population</strong>
+            <div class="tag-row">${resource.populations.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+          </div>
+          <div class="detail-box">
+            <strong>Geography</strong>
+            <div class="tag-row">${resource.geography.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+          </div>
+          <div class="detail-box">
+            <strong>Use case</strong>
+            <div class="tag-row">${resource.useCases.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+          </div>
+          <div class="detail-box">
+            <strong>Author type</strong>
+            <div>${resource.details.authorType}</div>
+          </div>
+          <div class="detail-box">
+            <strong>Why this is useful</strong>
+            <div>${resource.details.whyUseful}</div>
+          </div>
+        </div>
+        <div class="actions" style="margin-top:18px;">
+          <a class="button primary" href="${resource.link}" target="_blank" rel="noopener noreferrer">Open original resource</a>
+        </div>
+      `;
+      document.getElementById("detailDialog").showModal();
+    }
+
+    function update() {
+      renderChips("topicChips", "topic", allOptions.topic);
+      renderChips("populationChips", "population", allOptions.population);
+      renderChips("geographyChips", "geography", allOptions.geography);
+      renderChips("useCaseChips", "useCase", allOptions.useCase);
+      renderCards(resources.filter(matches));
+    }
+
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      state.search = e.target.value;
+      update();
+    });
+
+    update();
+  </script>
+</body>
+</html>
